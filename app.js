@@ -8,10 +8,16 @@ var logger = require('morgan');
 var getIndexPage = require('./routes/index');
 var formDataPage = require('./routes/formdata');
 var mysql = require('mysql');
+var randomstring = require("randomstring");
 var app = express();
 var fs = require('fs');
-var buf = new Buffer(1024);
-var spawn = require('child_process').spawn;
+const Cryptr = require('cryptr');
+var SecretKey = randomstring.generate({
+  length: 20 ,
+  charset: 'alphabetic'
+});
+const cryptr = new Cryptr(SecretKey);
+
 // HTTP Headers.
 app.use(function (req, res, next) {
     //Enabling CORS 
@@ -33,10 +39,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.set('json spaces', 2);
 
-// set a cookie
 const middlewares = [
 	express.static(path.join(__dirname, 'public')),
-  express.static(path.join(__dirname, 'ace-builds-master')),
+	express.static(path.join(__dirname, 'ace-builds-master')),
 	bodyParser.json(), // support json encoded bodies
 	bodyParser.urlencoded({ extended: true }) // support encoded bodies
 ]
@@ -46,7 +51,7 @@ app.use(middlewares);
 // GET method route
 app.get('/', getIndexPage);
 app.get('/home', getIndexPage);
-app.get('/data', getIndexPage);
+app.get('/data', formDataPage);
 app.get('/formdata', formDataPage);
 
 let options = {
@@ -61,11 +66,11 @@ app.post('/', function (req, res, next) {
   var sql = "";
   var default_query = req.body.Query_name + " select count(*) from Employee; ";
   var connection = mysql.createConnection({
-        host: req.body.Host_Name === "" ? req.cookies['host'] : req.body.Host_Name,
+        host: req.body.Host_Name === "" ? cryptr.decrypt(req.cookies['host']) : req.body.Host_Name,
         port: 3306,
-        user     : req.body.User_Name === "" ? req.cookies['user'] : req.body.User_Name,
-        password : req.body.User_Password === "" ? req.cookies['password'] : req.body.User_Password,
-        database : req.body.Database_Name === "" ? req.cookies['database'] : req.body.Database_Name,
+        user     : req.body.User_Name === "" ? cryptr.decrypt(req.cookies['user']) : req.body.User_Name,
+        password : req.body.User_Password === "" ? cryptr.decrypt(req.cookies['password']) : req.body.User_Password,
+        database : req.body.Database_Name === "" ? cryptr.decrypt(req.cookies['database']) : req.body.Database_Name,
         insecureAuth: true,
         multipleStatements: true
     });
@@ -81,12 +86,12 @@ app.post('/', function (req, res, next) {
     }
     else{
       if (cookie === undefined && req.body.Remember_Login === "on"){
-      res.cookie('SetCookieDone', req.body.Remember_Login, { maxAge: 900000, httpOnly: true });
-      res.cookie('host', req.body.Host_Name || req.cookies['host'], { maxAge: 900000, httpOnly: true });
-      res.cookie('user', req.body.User_Name || req.cookies['user'], { maxAge: 900000, httpOnly: true });
-      res.cookie('password', req.body.User_Password || req.cookies['password'], { maxAge: 900000, httpOnly: true });
-      res.cookie('database', req.body.Database_Name || req.cookies['database'], { maxAge: 900000, httpOnly: true });
-      res.cookie('query', sql, { maxAge: 900000, httpOnly: true });
+      res.cookie('SetCookieDone', cryptr.encrypt(req.body.Remember_Login), { maxAge: 900000, httpOnly: true });
+      res.cookie('host', cryptr.encrypt(req.body.Host_Name) || cryptr.encrypt(req.cookies['host']), { maxAge: 900000, httpOnly: true });
+      res.cookie('user', cryptr.encrypt(req.body.User_Name) || cryptr.encrypt(req.cookies['user']), { maxAge: 900000, httpOnly: true });
+      res.cookie('password', cryptr.encrypt(req.body.User_Password) || cryptr.encrypt(req.cookies['password']), { maxAge: 900000, httpOnly: true });
+      res.cookie('database', cryptr.encrypt(req.body.Database_Name) || cryptr.encrypt(req.cookies['database']), { maxAge: 900000, httpOnly: true });
+      res.cookie('query', cryptr.encrypt(sql), { maxAge: 900000, httpOnly: true });
     } else {}
       res.locals.check = req.body.Remember_Login;
       res.locals.query = req.body.Query_name;
@@ -100,6 +105,7 @@ app.post('/', function (req, res, next) {
 
 // POST Data
 app.post('/formdata', function (req, res, next) {
+  var cookie = req.cookies.cookieName;
   var form_check = "Form is valid.";
   var insertSQL = "Insert Into Employee Values (" + "'" + req.body.First_Name + "', " + "'" + req.body.Middle_init_Name + "', " + "'" + 
                                                             req.body.Last_Name + "', " + "'" + req.body.SSN + "', " + "'" + req.body.Emp_Bdate + "', " + "'" + req.body.Address + "', " + "'" +
@@ -112,15 +118,22 @@ app.post('/formdata', function (req, res, next) {
   res.locals.form_data = insertSQL + " " + dependentSQL + " " + WorksOnSQL;
   res.locals.form_success = "Data Submitted Sucessfully.";
     var connection = mysql.createConnection({
-        host: req.cookies['host'] === "" ? "127.0.0.1" : req.cookies['host'],
+        host: "127.0.0.1",
         port: 3306,
-        user     : req.cookies['user'] === "" ? "root" : req.cookies['user'],
-        password : req.cookies['password'] === "" ? "sumit" : req.cookies['password'],
-        database : req.cookies['database'] === "" ? "employee_info" : req.cookies['database'],
+        user     : "root",
+        password : "sumit",
+        database : "employee_info",
         insecureAuth: true,
         multipleStatements: true
     });
     connection.query(res.locals.form_query, function(err, result){
+    	if (cookie === undefined){
+      		res.cookie('SetCookieDone', cryptr.encrypt("on"), { maxAge: 900000, httpOnly: true });
+      		res.cookie('host', cryptr.encrypt("127.0.0.1") || cryptr.encrypt(req.cookies['host']), { maxAge: 900000, httpOnly: true });
+      		res.cookie('user', cryptr.encrypt("root") || cryptr.encrypt(req.cookies['user']), { maxAge: 900000, httpOnly: true });
+      		res.cookie('password', cryptr.encrypt("sumit") || cryptr.encrypt(req.cookies['password']), { maxAge: 900000, httpOnly: true });
+      		res.cookie('database', cryptr.encrypt("employee_info") || cryptr.encrypt(req.cookies['database']), { maxAge: 900000, httpOnly: true });
+    }
     if(err)
     {
       res.locals.query = res.locals.form_query;
