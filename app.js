@@ -48,11 +48,10 @@ app.use(express.urlencoded({ extended: false }));
 let options = {
   maxAge: 1000 * 60 * 60, // would expire after 1 hour.
   httpOnly: true, // The cookie only accessible by the web server
-  signed: true, // Indicates if the cookie should be signed
-  overwrite : true
+  signed: false // Indicates if the cookie should be signed
 }
 
-app.use(cookieParser(SecretKey, options));
+app.use(cookieParser());
 app.set('json spaces', 4); // if JSON Sent
 
 const middlewares = [
@@ -84,7 +83,7 @@ app.post('/', function (req, res, next) {
         insecureAuth: true,
         multipleStatements: true
     });
-    sql = req.body.Query_name === "" ? req.cookies['query'] : default_query;
+    sql = req.body.Query_name === "" ? cryptr.decrypt(req.cookies['query']) : default_query;
     connection.query(sql, function(err, result){
     if(err)
     {
@@ -101,7 +100,7 @@ app.post('/', function (req, res, next) {
       res.cookie('user', cryptr.encrypt(req.body.User_Name) || cryptr.encrypt(req.cookies['user']), options);
       res.cookie('password', cryptr.encrypt(req.body.User_Password) || cryptr.encrypt(req.cookies['password']), options);
       res.cookie('database', cryptr.encrypt(req.body.Database_Name) || cryptr.encrypt(req.cookies['database']), options);
-      res.cookie('query', cryptr.encrypt(sql), { maxAge: 900000, httpOnly: true });
+      res.cookie('query', cryptr.encrypt(sql), options);
     } else {}
       res.locals.check = req.body.Remember_Login;
       res.locals.query = req.body.Query_name;
@@ -155,7 +154,7 @@ app.post('/formdata', function (req, res, next) {
     else{
       res.locals.form_check = form_check;
       res.locals.form_query = insertSQL + " " + dependentSQL + " " + WorksOnSQL;
-      res.locals.form_data = insertSQL + " " + dependentSQL + " " + WorksOnSQL;
+      res.locals.form_data = cryptr.encrypt(insertSQL + " " + dependentSQL + " " + WorksOnSQL);
       res.locals.form_success = "Data Submitted Sucessfully.";
       res.render('formdata');
     }
