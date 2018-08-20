@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<title>SQL Blockchain</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="https://localhost:3000/images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="msapplication-tap-highlight" content="no">
+    <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+    <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+    <!--  Android 5 Chrome Color-->
+    <meta name="theme-color" content="#EE6E73">
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- Material Design for Bootstrap CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script src="https://localhost:3000/ace-builds-master/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+    #editor, #editor2 {
+      position: relative;
+      width: 1750px;
+      height: 250px;
+    }
+    </style>
+   </head> 
+  <body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+  <form action="https://localhost:3000/formdata" method="post">
+      <div class="jumbotron">
+        <h1 class="display-4">Data Form</h1>
+          <p class="lead">Please enter data as requested. This data will inserted into SQL server via secure connection.</p>
+            <hr class="my-4">
+      <label for="Employee_cred" class="text-success"><strong>Employee Information : </strong></label>
+      <div class="form-row">
+      <div class="form-group col-md-2">
+        <label for="First_Name" class="bmd-label-floating bmd-label-warning">First Name</label>
+        <input type="text" class="form-control" name="First_Name">
+        <span class="bmd-help"></span>
+      </div>
+      <div class="form-group col-md-2">
+        <label for="Middle_init_Name" class="bmd-label-floating">Middle Initial</label>
+        <input type="text" class="form-control" name="Middle_init_Name">
+        <span class="bmd-help"></span>
+      </div>
+      <div class="form-group col-md-2">
+        <label for="Last_Name" class="bmd-label-floating">Last Name</label>
+        <input type="text" class="form-control" name="Last_Name">
+        <span class="bmd-help"></span>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="SSN" class="bmd-label-floating">Employee SSN</label>
+        <input type="password" class="form-control" name="SSN">
+        <span class="bmd-help"></span>
+      </div>
+      <div class="form-group col-md-3">
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Gender : </label>
+        </div>
+        <select class="custom-select" name="Emp_Gender">
+          <option selected>Choose...</option>
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+          <option value="S">Special</option>
+        </select>
+      </div>
+      </div>
+    </div>
+    <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="Address" class="bmd-label-floating">Employee Address</label>
+      <input type="text" class="form-control" name="Address">
+      <span class="bmd-help"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label for="SSN" class="bmd-label-floating">Employee Salary</label>
+        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="Emp_Salary">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="Bdate" class="bmd-label-floating"></label>
+        <input type="date" class="form-control" name="Emp_Bdate">
+      </div>
+      </div>
+    <label for="Dependent_information" class="text-success"><strong>Dependent Information : </strong></label>
+    <div class="form-row">
+      <div class="form-group col-md-3">
+        <label for="Dependent_name" class="bmd-label-floating bmd-label-warning">Dependent Name</label>
+        <input type="text" class="form-control" name="Dependent_name">
+        <span class="bmd-help"></span>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="Relationship" class="bmd-label-floating">Relationship</label>
+        <input type="text" class="form-control" name="Relationship">
+        <span class="bmd-help"></span>
+      </div>
+      <div class="form-group col-md-3">
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Gender : </label>
+        </div>
+        <select class="custom-select" name="Dependent_Gender">
+          <option selected>Choose...</option>
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+          <option value="S">Special</option>
+        </select>
+      </div>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="Bdate" class="bmd-label-floating"></label>
+        <input type="date" class="form-control" name="Dependent_Bdate">
+      </div>
+    </div>
+      <label for="Employee_cred" class="text-success"><strong>Work Information : </strong></label>
+      <div class="form-row">
+      <div class="form-group col-md-4">
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Dept Name : </label>
+        </div>
+        <select class="custom-select" name="Dept_name">
+          <option selected>Choose...</option>
+          <option value="Special Admins">Special Admins</option>
+          <option value="Software Engineerning">Software Engineerning</option>
+          <option value="Human Resources">Human Resources</option>
+          <option value="Research">Research</option>
+          <option value="Computer Administration">Computer Administration</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group col-md-4">
+      <div class="input-group mb-3">
+          <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Dept No. : </label>
+        </div>
+        <select class="custom-select" name="Dept_number">
+          <option selected>Choose...</option>
+          <option value="1">Special Admins (1)</option>
+          <option value="2">Software Engineerning (2)</option>
+          <option value="3">Human Resources (3)</option>
+          <option value="4">Research (4)</option>
+          <option value="5">Computer Administration (5)</option>
+        </select>
+      </div>
+    </div>
+      <div class="form-group col-md-4">
+        <label for="Project_Manhours" class="bmd-label-floating bmd-label-warning">Work Hours</label>
+        <input type="text" class="form-control" name="Project_Manhours">
+        <span class="bmd-help"></span>
+      </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-3">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Project Name : </label>
+        </div>
+        <select class="custom-select" name="Project_name">
+          <option selected>Choose...</option>
+          <option value="Google Compute Engine">Google Compute Engine</option>
+          <option value="Google BigSQL Management">Google BigSQL Management</option>
+          <option value="HireX Beta">HireX Beta</option>
+          <option value="InterviewZoom Alpha Proto">InterviewZoom Alpha Proto</option>
+          <option value="GCGC Collections Info">GCGC Collections Info</option>
+          <option value="ReStructSQL">ReStructSQL</option>
+          <option value="CodeToCode Alpha Release">CodeToCode Alpha Release</option>
+          <option value="HireX Proto Build">HireX Proto Build</option>
+          <option value="Google BigChain Engine">Google BigChain Engine</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group col-md-3">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Project Number : </label>
+        </div>
+        <select class="custom-select" name="Project_Number">
+          <option selected>Choose...</option>
+          <option value="3544">Google Compute Engine</option>
+          <option value="7546">Google BigSQL Management</option>
+          <option value="5669">HireX Beta</option>
+          <option value="6199">InterviewZoom Alpha Proto</option>
+          <option value="3321">GCGC Collections Info</option>
+          <option value="8854">ReStructSQL</option>
+          <option value="4456">CodeToCode Alpha Release</option>
+          <option value="4412">HireX Proto Build</option>
+          <option value="7545">Google BigChain Engine</option>
+        </select>
+      </div>
+    </div>
+      <div class="form-group col-md-3">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Manager SSN : </label>
+        </div>
+        <select class="custom-select" name="Super_SSN">
+          <option selected>Choose...</option>
+          <option value="333433345">Joyce Smith</option>
+          <option value="153445789">Jennifer Wallacia</option>
+          <option value="556545624">Milinda Taylor</option>
+          <option value="222566634">Hayes Smith</option>
+          <option value="800000000">Gohen Zilvoski</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group col-md-3">
+        <label for="Manager_Name" class="bmd-label-floating">Manager Name</label>
+        <input type="text" class="form-control" name="Manager_Name">
+        <span class="bmd-help"></span>
+      </div>
+    </div>
+      <hr>
+          <div class="form-group">
+        <label for="Query_name" class="bmd-label-floating">Enter extra information (if required) which can make processing faster and better for us.</label><br><hr>
+        <input type="hidden" name="Query_name" style="display: none;"><div id="editor"></div>
+  <script type="text/javascript">
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/crimson_editor");
+    editor.setFontSize(15);
+    editor.session.setMode("ace/mode/c_cpp");
+    var input = $('input[name="Query_name"]');
+        editor.getSession().on("change", function () {
+        input.val(editor.getSession().getValue());
+    });
+  </script>
+        <span class="bmd-help"></span>
+    </div>
+    </div>
+      </div>
+    </div>
+    </div>
+     <span>
+        <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg">Submit Data</button>
+      </span>
+    </p>
+    </div>
+	</form>
+  <div class="alert alert-success" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h4 class="alert-heading alert-dismissible fade show" role="alert"><i class="material-icons align-middle">https</i><%= form_check + ' ' + form_success %></h4>
+  <hr><p class="mb-0"><strong><pre class="text-success"><%= 'Data Given : ' + JSON.stringify(form_data, undefined, 4) %></pre></strong></p>
+</div>
+</body>
+</html>

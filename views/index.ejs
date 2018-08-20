@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<title>SQL Blockchain</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="https://localhost:3000/images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="msapplication-tap-highlight" content="no">
+    <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+    <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+    <!--  Android 5 Chrome Color-->
+    <meta name="theme-color" content="#EE6E73">
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- Material Design for Bootstrap CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script src="https://localhost:3000/ace-builds-master/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+<style>
+#editor, #editor2 {
+    position: relative;
+    width: 1810px;
+    height: 150px;
+}
+</style>
+  </head>
+  <body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+    <div>
+    	<h4>
+    	   SQL Blockchain Interface. 
+    	</h4>
+      <h6>Please enter data as requested. This will help in connecting to the required server.</h6>
+    </div>
+    <form id="target" action="https://localhost:3000/" method="post" novalidate>
+        <div class="form-row">
+      <div class="form-group col-md-3">
+        <label for="Host_Name" class="bmd-label-floating bmd-label-warning">Host Name</label>
+        <input type="text" class="form-control" name="Host_Name">
+        <span class="bmd-help">Enter Host Name URL</span>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="User_Name" class="bmd-label-floating">User Name</label>
+        <input type="email" class="form-control" name="User_Name">
+        <span class="bmd-help">Enter User Name.</span>
+      </div>
+  		<div class="form-group col-md-3">
+    		<label for="Database_Name" class="bmd-label-floating">Database Name</label>
+    		<input type="text" class="form-control" name="Database_Name">
+    		<span class="bmd-help">Database to connect.</span>
+  		</div>
+  		<div class="form-group col-md-3">
+    		<label for="User_Password" class="bmd-label-floating">Password</label>
+    		<input type="password" class="form-control" name="User_Password">
+    		<span class="bmd-help">Valid connection password</span>
+  		</div>
+    </div>
+    <div class="form-group">
+        <label for="Query_name" class="bmd-label-floating">Enter Valid SQL Query in the box.</label>
+        <input type="hidden" name="Query_name" style="display: none;"><div id="editor"></div>
+  <script type="text/javascript">
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/textmate");
+    editor.setFontSize(15);
+    editor.session.setMode("ace/mode/sqlserver");
+    var input = $('input[name="Query_name"]');
+        editor.getSession().on("change", function () {
+        input.val(editor.getSession().getValue());
+    });
+  </script>
+        <span class="bmd-help"></span>
+    </div>
+      <div class="switch">
+        <label>
+          <input type="checkbox" name="Remember_Login" data-toggle="modal" data-target="#exampleModalLong"> Remember Credentials and Query
+        </label>
+      </div>
+      <span>
+        <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg" >Submit Query</button>
+      </span>
+	</form>
+  <a href="https://localhost:3000/formdata"><div class="btn btn-primary btn-raised btn-info btn-lg">Populate Data</div></a><hr>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Data Caching Prompt</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Your data will be stored in a cookie if this <strong class="text-success">option</strong> is selected. <br><br>To clear the cookie set by the website, click on <strong class="text-success text-center align-middle" ><i class="material-icons text-center align-middle">https</i> green padlock</strong> in front of wesbite url above. Click on <strong>Cookies</strong> and then click on <strong class="text-danger">Remove</strong> to remove the cookies. <br><br>Setting this cookie is highly <strong class="text-success">recommended</strong> for ease of filling out data.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Okay</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="alert alert-success" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h4 class="alert-heading alert-dismissible fade show" role="alert"><%= success %></h4>
+  <hr><p class="mb-0"><strong><pre class="text-success text-center align-middle"><i class="material-icons align-middle">https</i><%= 'Query String : '+ query %></pre></strong></p>
+</div>
+<h4><code class="text-success">Tables Populated : </code></h4>
+<% for (var item in data) { %>
+<div class="table-responsive">
+<table class="table">
+  <caption><%= 'Table ' + item %></caption>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+        <% for (var key in data[item][0])  { %>
+        <th scope="col"><%= key %></th>
+        <% } %>
+    </tr>
+  </thead>
+  <tbody>
+  <% for (var i = 0; i < data[item].length; i++) { %>
+    <tr class="table-success">
+        <td scope="row"><%= i %></td>
+        <% for (var key in data[item][i]) { %>
+        <% var value = data[item][i][key] %>
+        <td><%= value %></td>
+        <% } %>
+    </tr>    
+<% } %>
+</tbody>
+</table>
+</div>
+<% } %>
+</body>
+</html>
