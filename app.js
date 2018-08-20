@@ -11,19 +11,27 @@ var mysql = require('mysql');
 var randomstring = require("randomstring");
 var app = express();
 var fs = require('fs');
+
+// Encrypt cookies while setting. Decrypt cookies while using.
 const Cryptr = require('cryptr');
-var SecretKey = randomstring.generate({
-  length: 20 ,
-  charset: 'alphabetic'
-});
+var SecretKey = randomstring.generate({  length: 20 ,  charset: 'alphabetic' });
 const cryptr = new Cryptr(SecretKey);
+
 
 // HTTP Headers.
 app.use(function (req, res, next) {
-    //Enabling CORS 
     res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Max-Age", "600");
     res.header("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Headers", "Origin, X-PINGOTHER, X-Requested-With, contentType, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Request-Headers", "Origin, X-PINGOTHER, X-Requested-With, contentType, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Request-Method", "POST");
+    res.header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
+    res.header("X-Requested-With","XMLHttpRequest");
+    res.header("Access-Control-Max-Age","86400");
+    res.header("statusText","Headers OK");
+    res.header("Cache-Control","private");
     res.header("X-Powered-By","Blockchain Server");
     res.header("status", "200");
     next();
@@ -36,8 +44,16 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.set('json spaces', 2);
+
+let options = {
+  maxAge: 1000 * 60 * 60, // would expire after 1 hour.
+  httpOnly: true, // The cookie only accessible by the web server
+  signed: true, // Indicates if the cookie should be signed
+  overwrite : true
+}
+
+app.use(cookieParser(SecretKey, options));
+app.set('json spaces', 4); // if JSON Sent
 
 const middlewares = [
 	express.static(path.join(__dirname, 'public')),
@@ -53,12 +69,6 @@ app.get('/', getIndexPage);
 app.get('/home', getIndexPage);
 app.get('/data', formDataPage);
 app.get('/formdata', formDataPage);
-
-let options = {
-  maxAge: 1000 * 60 * 15, // would expire after 15 minutes
-  httpOnly: true, // The cookie only accessible by the web server
-  signed: true // Indicates if the cookie should be signed
-}
 
 // POST method route
 app.post('/', function (req, res, next) {
@@ -86,11 +96,11 @@ app.post('/', function (req, res, next) {
     }
     else{
       if (cookie === undefined && req.body.Remember_Login === "on"){
-      res.cookie('SetCookieDone', cryptr.encrypt(req.body.Remember_Login), { maxAge: 900000, httpOnly: true });
-      res.cookie('host', cryptr.encrypt(req.body.Host_Name) || cryptr.encrypt(req.cookies['host']), { maxAge: 900000, httpOnly: true });
-      res.cookie('user', cryptr.encrypt(req.body.User_Name) || cryptr.encrypt(req.cookies['user']), { maxAge: 900000, httpOnly: true });
-      res.cookie('password', cryptr.encrypt(req.body.User_Password) || cryptr.encrypt(req.cookies['password']), { maxAge: 900000, httpOnly: true });
-      res.cookie('database', cryptr.encrypt(req.body.Database_Name) || cryptr.encrypt(req.cookies['database']), { maxAge: 900000, httpOnly: true });
+      res.cookie('SetCookieDone', cryptr.encrypt(req.body.Remember_Login), options);
+      res.cookie('host', cryptr.encrypt(req.body.Host_Name) || cryptr.encrypt(req.cookies['host']), options);
+      res.cookie('user', cryptr.encrypt(req.body.User_Name) || cryptr.encrypt(req.cookies['user']), options);
+      res.cookie('password', cryptr.encrypt(req.body.User_Password) || cryptr.encrypt(req.cookies['password']), options);
+      res.cookie('database', cryptr.encrypt(req.body.Database_Name) || cryptr.encrypt(req.cookies['database']), options);
       res.cookie('query', cryptr.encrypt(sql), { maxAge: 900000, httpOnly: true });
     } else {}
       res.locals.check = req.body.Remember_Login;
@@ -128,11 +138,11 @@ app.post('/formdata', function (req, res, next) {
     });
     connection.query(res.locals.form_query, function(err, result){
     	if (cookie === undefined){
-      		res.cookie('SetCookieDone', cryptr.encrypt("on"), { maxAge: 900000, httpOnly: true });
-      		res.cookie('host', cryptr.encrypt("127.0.0.1") || cryptr.encrypt(req.cookies['host']), { maxAge: 900000, httpOnly: true });
-      		res.cookie('user', cryptr.encrypt("root") || cryptr.encrypt(req.cookies['user']), { maxAge: 900000, httpOnly: true });
-      		res.cookie('password', cryptr.encrypt("sumit") || cryptr.encrypt(req.cookies['password']), { maxAge: 900000, httpOnly: true });
-      		res.cookie('database', cryptr.encrypt("employee_info") || cryptr.encrypt(req.cookies['database']), { maxAge: 900000, httpOnly: true });
+      		res.cookie('SetCookieDone', cryptr.encrypt("on"), options);
+      		res.cookie('host', cryptr.encrypt("127.0.0.1") || cryptr.encrypt(req.cookies['host']), options);
+      		res.cookie('user', cryptr.encrypt("root") || cryptr.encrypt(req.cookies['user']), options);
+      		res.cookie('password', cryptr.encrypt("sumit") || cryptr.encrypt(req.cookies['password']), options);
+      		res.cookie('database', cryptr.encrypt("employee_info") || cryptr.encrypt(req.cookies['database']), options);
     }
     if(err)
     {
