@@ -32,32 +32,32 @@
 }
 </style>
 <script type="text/javascript">
-  /*function DataLoad(){
-      if(window.XMLHttpRequest){ 
-        var xmlhttp = new XMLHttpRequest();
+  function DataLoad(){
+    if(window.XMLHttpRequest){ 
+      var xmlhttp = new XMLHttpRequest();
+    }
+    else{ 
+      var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    var myForm = document.getElementById('myForm');
+    var form_data = new FormData(myForm);
+    xmlhttp.onreadystatechange = function(){
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        console.log("Request finished and response is ready. FIN : 1");
+        document.getElementById("request").innerHTML = this.responseText;
+    } else {
+      console.log("Still Waiting for server response.");
       }
-      else{ 
-        var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-      }
-      var myForm = document.getElementById('myForm');
-      var form_data = new FormData(myForm);
-      xmlhttp.onreadystatechange = function(){
-      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-          console.log("Request finished and response is ready. FIN : 1");
-          document.getElementById("request").innerHTML = this.responseText;
-      } else {
-        console.log("Still Waiting for server response.");
-        }
-      }
-      xmlhttp.open("POST", "https://localhost:3000", true);
-      xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-      xmlhttp.setRequestHeader("Content-type", "multipart/form-data");
-      xmlhttp.send(form_data);
+    }
+    xmlhttp.open("POST", "https://localhost:3000", true);
+    xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xmlhttp.setRequestHeader("Content-type", "multipart/form-data");
+    xmlhttp.send(form_data);
   }
   $( "button" ).click(function( event ) {
       event.preventDefault();
       DataLoad();
-    });*/
+  });
 </script>
 </head>
   <body>
@@ -73,7 +73,8 @@
     	</h4>
       <h6>Please enter data as requested. This will help in connecting to the required server.</h6>
     </div>
-    <form action="https://localhost:3000/" method="post">
+    <!--form id="myForm" action="https://localhost:3000/" method="post" novalidate-->
+    <form id="myForm" novalidate>
         <div class="form-row">
       <div class="form-group col-md-3">
         <label for="Host_Name" class="bmd-label-floating bmd-label-warning">Host Name</label>
@@ -117,9 +118,10 @@
         </label>
       </div>
       <span>
-        <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg">Submit Query</button>
+        <!--button type="submit" class="btn btn-primary btn-raised btn-success btn-lg">Submit Query</button> -->
       </span>
 	</form>
+  <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg" onclick="DataLoad()" >Submit Data</button>
 <a href="https://localhost:3000/formdata"><div class="btn btn-primary btn-raised btn-info btn-lg">Populate Data </div></a><hr>
 <!-- Modal -->
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">

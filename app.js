@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var getIndexPage = require('./routes/index');
 var formDataPage = require('./routes/formdata');
+var respDataPage = require('./routes/response');
 var mysql = require('mysql');
 var randomstring = require("randomstring");
 var app = express();
@@ -69,6 +70,7 @@ app.get('/', getIndexPage);
 app.get('/home', getIndexPage);
 app.get('/data', formDataPage);
 app.get('/formdata', formDataPage);
+app.get('/response', respDataPage);
 
 //AJAX Typehead {experimental} & XMLHttpRequest
 app.get('/search',function(req,res){
@@ -137,9 +139,9 @@ app.post('/', function (req, res, next) {
       res.locals.query = req.body.Query_name;
       res.locals.data = result;
       res.locals.success = "Query Executed Sucessfully !";
-      // res.send(result);
+      res.send(result);
       // res.send(JSON.stringify(result));
-      res.render('index');
+      // res.render('index');
     }
    });
     connection.end();
