@@ -25,54 +25,41 @@
     <script src="https://localhost:3000/ace-builds-master/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
 <style>
-#editor, #editor2 {
+#text_editor {
     position: relative;
     width: 1810px;
     height: 150px;
 }
 </style>
-  <script type="text/javascript">
-      if(window.XMLHttpRequest)
-      { 
-        xmlhttp = new XMLHttpRequest();
+<script type="text/javascript">
+  /*function DataLoad(){
+      if(window.XMLHttpRequest){ 
+        var xmlhttp = new XMLHttpRequest();
       }
-      else
-      { 
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      else{ 
+        var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
       }
-      xmlhttp.onreadystatechange = function()
-      {
-        if (xmlhttp.readyState == 0)
-        {
-          console.log("Request not initialized. Initializing.");
-        }
-        if (xmlhttp.readyState == 1)
-        {
-          console.log("Server connection established. ACK : 1.");
-        }
-        if (xmlhttp.readyState == 2)
-        {
-          console.log("Server : Request received. ACK : 1.");
-        }
-        if (xmlhttp.readyState == 3)
-        {
-          console.log("Server : Is Processing Request.");
-        }
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-        {
+      var myForm = document.getElementById('myForm');
+      var form_data = new FormData(myForm);
+      xmlhttp.onreadystatechange = function(){
+      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           console.log("Request finished and response is ready. FIN : 1");
-        }
-        else
-        {
-          console.log("Still Waiting for server response.");
+          document.getElementById("request").innerHTML = this.responseText;
+      } else {
+        console.log("Still Waiting for server response.");
         }
       }
-      xmlhttp.open("GET", "https://localhost:3000/search?key=%", true);
+      xmlhttp.open("POST", "https://localhost:3000", true);
       xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xmlhttp.send();
-    </script>
-  </head>
+      xmlhttp.setRequestHeader("Content-type", "multipart/form-data");
+      xmlhttp.send(form_data);
+  }
+  $( "button" ).click(function( event ) {
+      event.preventDefault();
+      DataLoad();
+    });*/
+</script>
+</head>
   <body>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -86,7 +73,7 @@
     	</h4>
       <h6>Please enter data as requested. This will help in connecting to the required server.</h6>
     </div>
-    <form action="https://localhost:3000/" method="post" novalidate>
+    <form action="https://localhost:3000/" method="post">
         <div class="form-row">
       <div class="form-group col-md-3">
         <label for="Host_Name" class="bmd-label-floating bmd-label-warning">Host Name</label>
@@ -95,7 +82,7 @@
       </div>
       <div class="form-group col-md-3">
         <label for="User_Name" class="bmd-label-floating">User Name</label>
-        <input type="email" class="form-control" name="User_Name">
+        <input type="text" class="form-control" name="User_Name">
         <span class="bmd-help">Enter User Name.</span>
       </div>
   		<div class="form-group col-md-3">
@@ -111,9 +98,9 @@
     </div>
     <div class="form-group">
         <label for="Query_name" class="bmd-label-floating">Enter Valid SQL Query in the box.</label>
-        <input type="hidden" name="Query_name" style="display: none;"><div id="editor"></div>
+        <input type="hidden" name="Query_name" style="display: none;"><div id="text_editor"></div>
   <script type="text/javascript">
-    var editor = ace.edit("editor");
+    var editor = ace.edit("text_editor");
     editor.setTheme("ace/theme/textmate");
     editor.setFontSize(15);
     editor.session.setMode("ace/mode/sqlserver");
@@ -130,10 +117,10 @@
         </label>
       </div>
       <span>
-        <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg" >Submit Query</button>
+        <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg">Submit Query</button>
       </span>
 	</form>
-  <a href="https://localhost:3000/formdata"><div class="btn btn-primary btn-raised btn-info btn-lg">Populate Data</div></a><hr>
+<a href="https://localhost:3000/formdata"><div class="btn btn-primary btn-raised btn-info btn-lg">Populate Data </div></a><hr>
 <!-- Modal -->
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">

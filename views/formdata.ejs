@@ -24,38 +24,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <script src="https://localhost:3000/ace-builds-master/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <style>
-    #editor, #editor2 {
+    #query_editor {
       position: relative;
       width: 1750px;
       height: 250px;
     }
     </style>
-  <script type="text/javascript">
-      if(window.XMLHttpRequest)
-      { 
-        xmlhttp = new XMLHttpRequest();
-      }
-      else
-      { 
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-      }
-      xmlhttp.onreadystatechange = function()
-      {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-        {
-          var data = this.responseText;
-          // document.getElementById("First_Name").innerHTML = data;
-          console.log("XMLHttpRequest done.");
-        }
-        else
-        {
-          console.log("Still Waiting for server response.");
-        }
-      }
-      xmlhttp.open("GET", "https://localhost:3000/search?key=%", true);
-      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xmlhttp.send();
-    </script>
   </head>
   <body>
     <!-- Optional JavaScript -->
@@ -249,25 +223,25 @@
       </div>
     </div>
       <hr>
-          <div class="form-group">
+  <div class="form-group">
         <label for="Query_information" class="bmd-label-floating">Enter extra information (if required) which can make processing faster and better for us.</label><br><hr>
-        <input type="hidden" name="Query_information" style="display: none;"><div id="editor2"></div>
+        <input type="hidden" name="Query_information" style="display: none;"><div id="query_editor"></div>
   <script type="text/javascript">
-    var editor = ace.edit("editor2");
-    editor.setTheme("ace/theme/crimson_editor");
-    editor.setFontSize(15);
-    editor.session.setMode("ace/mode/c_cpp");
-    var input = $('input[name="Query_information"]');
-        editor.getSession().on("change", function () {
-        input.val(editor.getSession().getValue());
+    var query_editor = new ace.edit("query_editor");
+    query_editor.setTheme("ace/theme/crimson_editor");
+    query_editor.setFontSize(15);
+    query_editor.session.setMode("ace/mode/c_cpp");
+    var input_data = $('input[name="Query_information"]');
+        query_editor.getSession().on("change", function () {
+        input_data.val(query_editor.getSession().getValue());
     });
   </script>
         <span class="bmd-help"></span>
-    </div>
-    </div>
+          </div>
+        </div>
       </div>
     </div>
-    </div>
+  </div>
      <span>
         <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg">Submit Data</button>
       </span>

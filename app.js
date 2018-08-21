@@ -137,6 +137,8 @@ app.post('/', function (req, res, next) {
       res.locals.query = req.body.Query_name;
       res.locals.data = result;
       res.locals.success = "Query Executed Sucessfully !";
+      // res.send(result);
+      // res.send(JSON.stringify(result));
       res.render('index');
     }
    });
