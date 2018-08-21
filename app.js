@@ -1,23 +1,26 @@
 var createError = require('http-errors');
 var express = require('express');
+var bodyParser = require('body-parser');
 var path = require('path');
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
 var logger = require('morgan');
 var getIndexPage = require('./routes/index');
 var formDataPage = require('./routes/formdata');
 var respDataPage = require('./routes/response');
+var errorPage = require('./routes/error');
 var mysql = require('mysql');
 var randomstring = require("randomstring");
 var app = express();
 var fs = require('fs');
+var qs = require('querystring');
+var multer  = require('multer');
+var upload = multer();
 
 // Encrypt cookies while setting. Decrypt cookies while using.
 const Cryptr = require('cryptr');
-var SecretKey = randomstring.generate({  length: 20 ,  charset: 'alphabetic' });
+var SecretKey = randomstring.generate({  length: 25 ,  charset: 'alphabetic' });
 const cryptr = new Cryptr(SecretKey);
-
 
 // HTTP Headers.
 app.use(function (req, res, next) {
@@ -39,13 +42,22 @@ app.use(function (req, res, next) {
     next();
 });
 
+const middlewares = [
+  express.static(path.join(__dirname, 'public')),
+  express.static(path.join(__dirname, 'ace-builds-master')),
+  bodyParser.urlencoded({ extended: false }), // support url x-www encoded bodies
+  bodyParser.json() // support json encoded bodies
+]
+
+app.use(middlewares);
+
 // view engine setup
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false })); // using if body-parser not available.
 
 let options = {
   maxAge: 1000 * 60 * 60, // would expire after 1 hour.
@@ -56,24 +68,16 @@ let options = {
 app.use(cookieParser());
 app.set('json spaces', 4); // if JSON Sent
 
-const middlewares = [
-	express.static(path.join(__dirname, 'public')),
-	express.static(path.join(__dirname, 'ace-builds-master')),
-	bodyParser.json(), // support json encoded bodies
-	bodyParser.urlencoded({ extended: true }) // support encoded bodies
-]
-
-app.use(middlewares);
-
 // GET method route
 app.get('/', getIndexPage);
 app.get('/home', getIndexPage);
 app.get('/data', formDataPage);
 app.get('/formdata', formDataPage);
 app.get('/response', respDataPage);
+app.get('/error', errorPage);
 
 //AJAX Typehead {experimental} & XMLHttpRequest
-app.get('/search',function(req,res){
+app.get('/search', function(req,res){
   var connection = mysql.createConnection({
       host: "127.0.0.1",
       port: 3306,
@@ -102,7 +106,7 @@ app.get('/search',function(req,res){
 });
 
 // POST method route
-app.post('/', function (req, res, next) {
+app.post('/', upload.array(), function (req, res, next) {
   var cookie = req.cookies.cookieName;
   var sql = "";
   var default_query = req.body.Query_name + " select count(*) from Employee; ";
@@ -120,10 +124,12 @@ app.post('/', function (req, res, next) {
     connection.query(sql, function(err, result){
     if(err)
     {
-      res.locals.query = sql;
+      res.locals.query = req.body.Query_name;
       res.locals.message = err.message;
       res.locals.error = err;
       res.locals.status = err.status === "" ? "50x" : 500;
+      res.locals.success = " Query returned Error.";
+      // res.send(JSON.stringify(req.body, null, 2));
       res.render('error');
     }
     else{
@@ -138,17 +144,17 @@ app.post('/', function (req, res, next) {
       res.locals.check = req.body.Remember_Login;
       res.locals.query = req.body.Query_name;
       res.locals.data = result;
-      res.locals.success = "Query Executed Sucessfully !";
-      res.send(result);
+      res.locals.success = " Query Executed Sucessfully.";
+      // res.send(JSON.stringify(req.body, null, 2));
       // res.send(JSON.stringify(result));
-      // res.render('index');
+      res.render('response');
     }
    });
     connection.end();
 });
 
 // POST Data
-app.post('/formdata', function (req, res, next) {
+app.post('/formdata', upload.array(),  function (req, res, next) {
   var cookie = req.cookies.cookieName;
   var form_check = "Form is valid.";
   var insertSQL = "Insert Into Employee Values (" + "'" + req.body.First_Name + "', " + "'" + req.body.Middle_init_Name + "', " + "'" +
@@ -185,6 +191,7 @@ app.post('/formdata', function (req, res, next) {
       res.locals.message = err.message;
       res.locals.error = err;
       res.locals.status = err.status === "" ? "50x" : 500;
+      res.locals.success = "Execution returned error 0x80004efbc ";
       res.render('error');
     }
     else{
@@ -200,7 +207,8 @@ app.post('/formdata', function (req, res, next) {
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  res.locals.query = "Page is not Found";
+  res.locals.query = "Page requested in not there yet.";
+  res.locals.success = "Execution returned error 0x80007ebac ";
   next(createError(404));
 });
 
@@ -210,6 +218,7 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = err;
   res.locals.status = err.status === "" ? "50x" : 500;
+  res.locals.success = "Execution returned error 0x80007efbc ";
   res.render('error');
 });
 

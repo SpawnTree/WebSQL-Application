@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/response', function(req, res, next) {
 	var check = "";
 	var query = "";
-	var data = "";
+	var data = {": No Response here. Nothing to query.": {}}
 	var success = ""
 	res.render('response', { data, query, success, check });
 });

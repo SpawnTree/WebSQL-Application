@@ -29,7 +29,59 @@
       width: 1750px;
       height: 250px;
     }
+    /* Start by setting display:none to make this hidden.
+   Then we position it in relation to the viewport window
+   with position:fixed. Width, height, top and left speak
+   speak for themselves. Background we set to 80% white with
+   our animation centered, and no-repeating */
+.zmodal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('https://localhost:3000/images/Rainbow.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
     </style>
+<script type="text/javascript">
+  function DataLoad(){
+    $body = $("body");
+    if(window.XMLHttpRequest){ 
+      var xmlhttp = new XMLHttpRequest();
+    }
+    else{ 
+      var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function(){
+    if (xmlhttp.readyState == 2){ $body.addClass("loading"); }
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        $body.removeClass("loading");
+    } else {
+      $body.addClass("loading"); 
+      }
+    }
+    xmlhttp.open("GET", "https://localhost:3000/error", true);
+    xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xmlhttp.send();
+  }
+</script>
   </head>
   <body>
     <!-- Optional JavaScript -->
@@ -225,7 +277,7 @@
       <hr>
   <div class="form-group">
         <label for="Query_information" class="bmd-label-floating">Enter extra information (if required) which can make processing faster and better for us.</label><br><hr>
-        <input type="hidden" name="Query_information" style="display: none;"><div id="query_editor"></div>
+        <input type="hidden" name="Query_information" style="display: none;"><div id="query_editor">What Language do you speak?. </div>
   <script type="text/javascript">
     var query_editor = new ace.edit("query_editor");
     query_editor.setTheme("ace/theme/crimson_editor");
@@ -243,7 +295,7 @@
     </div>
   </div>
      <span>
-        <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg">Submit Data</button>
+        <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg" onclick="DataLoad()">Submit Data</button>
       </span>
     </p>
     </div>
@@ -255,5 +307,6 @@
   <h4 class="alert-heading alert-dismissible fade show" role="alert"><i class="material-icons align-middle">https</i><%= form_check + ' ' + form_success %></h4>
   <hr><p class="mb-0"><strong><pre class="text-success"><%= 'Data Given : ' + JSON.stringify(form_data, undefined, 4) %></pre></strong></p>
 </div>
+<div class="zmodal"></div>
 </body>
 </html>
