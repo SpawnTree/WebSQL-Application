@@ -23,6 +23,7 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Max-Age", "600");
+    res.header("X-XSS-Protection", "1; mode=block");
     res.header("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, POST, PUT, DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-PINGOTHER, X-Requested-With, contentType, Content-Type, Accept, Authorization");
     res.header("Access-Control-Request-Headers", "Origin, X-PINGOTHER, X-Requested-With, contentType, Content-Type, Accept, Authorization");
@@ -69,6 +70,35 @@ app.get('/home', getIndexPage);
 app.get('/data', formDataPage);
 app.get('/formdata', formDataPage);
 
+//AJAX Typehead {experimental} & XMLHttpRequest
+app.get('/search',function(req,res){
+  var connection = mysql.createConnection({
+      host: "127.0.0.1",
+      port: 3306,
+      user     : "root",
+      password : "sumit",
+      database : "employee_info",
+      insecureAuth: true,
+      multipleStatements: true
+  });
+  connection.connect();
+  connection.query('SELECT Fname From EMPLOYEE Where Fname Like "%'+ req.query.key + '%"', function(err, rows, fields) {
+    if(err)
+    {
+      res.locals.query = sql;
+      res.locals.message = err.message;
+      res.locals.error = err;
+      res.locals.status = err.status === "" ? "50x" : 500;
+      res.render('error');
+    }
+      var data=[];
+      for(i = 0; i < rows.length; i++){
+        data.push(rows[i].Fname);
+      }
+      res.send(JSON.stringify(data));
+  });
+});
+
 // POST method route
 app.post('/', function (req, res, next) {
   var cookie = req.cookies.cookieName;
@@ -84,6 +114,7 @@ app.post('/', function (req, res, next) {
         multipleStatements: true
     });
     sql = req.body.Query_name === "" ? cryptr.decrypt(req.cookies['query']) : default_query;
+    connection.connect();
     connection.query(sql, function(err, result){
     if(err)
     {
@@ -96,16 +127,16 @@ app.post('/', function (req, res, next) {
     else{
       if (cookie === undefined && req.body.Remember_Login === "on"){
       res.cookie('SetCookieDone', cryptr.encrypt(req.body.Remember_Login), options);
-      res.cookie('host', cryptr.encrypt(req.body.Host_Name) || cryptr.encrypt(req.cookies['host']), options);
-      res.cookie('user', cryptr.encrypt(req.body.User_Name) || cryptr.encrypt(req.cookies['user']), options);
-      res.cookie('password', cryptr.encrypt(req.body.User_Password) || cryptr.encrypt(req.cookies['password']), options);
-      res.cookie('database', cryptr.encrypt(req.body.Database_Name) || cryptr.encrypt(req.cookies['database']), options);
+      res.cookie('host', req.body.Host_Name === "" ? req.cookies['host'] : cryptr.encrypt(req.body.Host_Name), options);
+      res.cookie('user', req.body.User_Name === "" ? req.cookies['user'] : cryptr.encrypt(req.body.User_Name), options);
+      res.cookie('password', req.body.User_Password === "" ? req.cookies['password'] : cryptr.encrypt(req.body.User_Password), options);
+      res.cookie('database', req.body.Database_Name === "" ? req.cookies['database'] : cryptr.encrypt(req.body.Database_Name), options);
       res.cookie('query', cryptr.encrypt(sql), options);
     } else {}
       res.locals.check = req.body.Remember_Login;
       res.locals.query = req.body.Query_name;
       res.locals.data = result;
-      res.locals.success = "Query Executed Sucessfully !"; 
+      res.locals.success = "Query Executed Sucessfully !";
       res.render('index');
     }
    });
@@ -116,7 +147,7 @@ app.post('/', function (req, res, next) {
 app.post('/formdata', function (req, res, next) {
   var cookie = req.cookies.cookieName;
   var form_check = "Form is valid.";
-  var insertSQL = "Insert Into Employee Values (" + "'" + req.body.First_Name + "', " + "'" + req.body.Middle_init_Name + "', " + "'" + 
+  var insertSQL = "Insert Into Employee Values (" + "'" + req.body.First_Name + "', " + "'" + req.body.Middle_init_Name + "', " + "'" +
                                                             req.body.Last_Name + "', " + "'" + req.body.SSN + "', " + "'" + req.body.Emp_Bdate + "', " + "'" + req.body.Address + "', " + "'" +
                                                             req.body.Emp_Gender + "', " + "'" + req.body.Emp_Salary + "', " + "'" + req.body.Super_SSN + "', " + "'" + req.body.Dept_number + "'" + ");" ;
   var dependentSQL = "Insert Into Dependent Values (" + "'" + req.body.SSN + "', " + "'" + req.body.Dependent_name + "', " + "'" + req.body.Dependent_Gender + "', " + "'" + req.body.Dependent_Bdate
@@ -135,6 +166,7 @@ app.post('/formdata', function (req, res, next) {
         insecureAuth: true,
         multipleStatements: true
     });
+    connection.connect();
     connection.query(res.locals.form_query, function(err, result){
     	if (cookie === undefined){
       		res.cookie('SetCookieDone', cryptr.encrypt("on"), options);

@@ -31,6 +31,47 @@
     height: 150px;
 }
 </style>
+  <script type="text/javascript">
+      if(window.XMLHttpRequest)
+      { 
+        xmlhttp = new XMLHttpRequest();
+      }
+      else
+      { 
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange = function()
+      {
+        if (xmlhttp.readyState == 0)
+        {
+          console.log("Request not initialized. Initializing.");
+        }
+        if (xmlhttp.readyState == 1)
+        {
+          console.log("Server connection established. ACK : 1.");
+        }
+        if (xmlhttp.readyState == 2)
+        {
+          console.log("Server : Request received. ACK : 1.");
+        }
+        if (xmlhttp.readyState == 3)
+        {
+          console.log("Server : Is Processing Request.");
+        }
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+        {
+          console.log("Request finished and response is ready. FIN : 1");
+        }
+        else
+        {
+          console.log("Still Waiting for server response.");
+        }
+      }
+      xmlhttp.open("GET", "https://localhost:3000/search?key=%", true);
+      xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xmlhttp.send();
+    </script>
   </head>
   <body>
     <!-- Optional JavaScript -->
@@ -41,11 +82,11 @@
     <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
     <div>
     	<h4>
-    	   SQL Blockchain Interface. 
+    	   SQL Blockchain Interface.
     	</h4>
       <h6>Please enter data as requested. This will help in connecting to the required server.</h6>
     </div>
-    <form id="target" action="https://localhost:3000/" method="post" novalidate>
+    <form action="https://localhost:3000/" method="post" novalidate>
         <div class="form-row">
       <div class="form-group col-md-3">
         <label for="Host_Name" class="bmd-label-floating bmd-label-warning">Host Name</label>
@@ -120,6 +161,7 @@
   <hr><p class="mb-0"><strong><pre class="text-success text-center align-middle"><i class="material-icons align-middle">https</i><%= 'Query String : '+ query %></pre></strong></p>
 </div>
 <h4><code class="text-success">Tables Populated : </code></h4>
+<div id="request"></div>
 <% for (var item in data) { %>
 <div class="table-responsive">
 <table class="table">
@@ -140,7 +182,7 @@
         <% var value = data[item][i][key] %>
         <td><%= value %></td>
         <% } %>
-    </tr>    
+    </tr>
 <% } %>
 </tbody>
 </table>

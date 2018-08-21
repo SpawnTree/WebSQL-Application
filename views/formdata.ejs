@@ -30,11 +30,37 @@
       height: 250px;
     }
     </style>
-   </head> 
+  <script type="text/javascript">
+      if(window.XMLHttpRequest)
+      { 
+        xmlhttp = new XMLHttpRequest();
+      }
+      else
+      { 
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange = function()
+      {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+        {
+          var data = this.responseText;
+          // document.getElementById("First_Name").innerHTML = data;
+          console.log("XMLHttpRequest done.");
+        }
+        else
+        {
+          console.log("Still Waiting for server response.");
+        }
+      }
+      xmlhttp.open("GET", "https://localhost:3000/search?key=%", true);
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xmlhttp.send();
+    </script>
+  </head>
   <body>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
     <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
@@ -45,9 +71,9 @@
             <hr class="my-4">
       <label for="Employee_cred" class="text-success"><strong>Employee Information : </strong></label>
       <div class="form-row">
-      <div class="form-group col-md-2">
+      <div id="First_Name" class="form-group col-md-2">
         <label for="First_Name" class="bmd-label-floating bmd-label-warning">First Name</label>
-        <input type="text" class="form-control" name="First_Name">
+        <input class="form-control" type="text"  spellcheck="false" autocomplete="off" name="First_Name">
         <span class="bmd-help"></span>
       </div>
       <div class="form-group col-md-2">
@@ -224,14 +250,14 @@
     </div>
       <hr>
           <div class="form-group">
-        <label for="Query_name" class="bmd-label-floating">Enter extra information (if required) which can make processing faster and better for us.</label><br><hr>
-        <input type="hidden" name="Query_name" style="display: none;"><div id="editor"></div>
+        <label for="Query_information" class="bmd-label-floating">Enter extra information (if required) which can make processing faster and better for us.</label><br><hr>
+        <input type="hidden" name="Query_information" style="display: none;"><div id="editor2"></div>
   <script type="text/javascript">
-    var editor = ace.edit("editor");
+    var editor = ace.edit("editor2");
     editor.setTheme("ace/theme/crimson_editor");
     editor.setFontSize(15);
     editor.session.setMode("ace/mode/c_cpp");
-    var input = $('input[name="Query_name"]');
+    var input = $('input[name="Query_information"]');
         editor.getSession().on("change", function () {
         input.val(editor.getSession().getValue());
     });
