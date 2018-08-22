@@ -12,9 +12,14 @@ Open ```https://localhost:3000```.
 
 ### Installs
 
-Node.js [Node.js Install](https://nodejs.org/en/download/)
-MySQL [MySQL Install](https://dev.mysql.com/downloads/)
-MySQL Windows [MySQL Windows](https://dev.mysql.com/downloads/windows/)
+Node.js
+[Node.js Install](https://nodejs.org/en/download/)
+
+MySQL
+[MySQL Install](https://dev.mysql.com/downloads/)
+
+MySQL Windows
+[MySQL Windows](https://dev.mysql.com/downloads/windows/)
 
 ### Screenshots.
 
