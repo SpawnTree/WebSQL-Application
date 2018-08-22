@@ -110,7 +110,7 @@ span.twitter-typeahead {
     display: block !important; }
     .input-group span.twitter-typeahead .tt-menu {
       top: 2.375rem !important; }
-.fmodal {
+.spin {
     display:    none;
     position:   fixed;
     z-index:    1000;
@@ -119,20 +119,16 @@ span.twitter-typeahead {
     height:     100%;
     width:      100%;
     background: rgba( 255, 255, 255, .8 ) 
-                url('https://localhost:3000/images/Rainbow.gif') 
+                url('https://localhost:3000/images/ajax-loader.gif') 
                 50% 50% 
                 no-repeat;
 }
 
-/* When the body has the loading class, we turn
-   the scrollbar off with overflow:hidden */
 body.loading {
     overflow: hidden;   
 }
 
-/* Anytime the body has the loading class, our
-   modal element will be visible */
-body.loading .modal {
+body.loading .spin {
     display: block;
 }
 
@@ -175,6 +171,12 @@ $('.typeahead').typeahead({
     }
   });
 });
+function delayload() {
+  $body = $("body");
+  var timeDelay = 500;
+  setTimeout(DataLoad, timeDelay);
+  $body.addClass("loading"); 
+}
   function DataLoad(){
     $body = $("body");
     if(window.XMLHttpRequest){ 
@@ -188,16 +190,17 @@ $('.typeahead').typeahead({
     xmlhttp.onreadystatechange = function(){
     if (xmlhttp.readyState == 2){ $body.addClass("loading"); }
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        $body.removeClass("loading"); 
-        console.log("Request finished and response is ready. FIN : 1");
         document.getElementById("request").innerHTML = this.responseText;
+        $body.removeClass("loading");
     } else {
-      $body.addClass("loading"); 
+      
       }
     }
     xmlhttp.open("POST", "https://localhost:3000", true);
     xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xmlhttp.send(form_data);
+    $('#myForm').trigger("reset");
+    $('#text_editor').trigger("reset");
   }
   $("button").click(function( event ) {
       event.preventDefault();
@@ -266,7 +269,7 @@ $('.typeahead').typeahead({
         <!--button type="submit" class="btn btn-primary btn-raised btn-success btn-lg">Submit Query</button> -->
       </span>
 	</form>
-  <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg" onclick="DataLoad()" >Submit Data</button>
+  <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg" onclick="delayload()" >Submit Data</button>
 <a href="https://localhost:3000/formdata"><div class="btn btn-primary btn-raised btn-info btn-lg">Populate Data </div></a><hr>
 <!-- Modal -->
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -323,6 +326,6 @@ $('.typeahead').typeahead({
 </table>
 </div>
 <% } %>
-<div class="fmodal"></div>
+<div class="spin"></div>
 </body>
 </html>
