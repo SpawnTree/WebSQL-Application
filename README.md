@@ -10,7 +10,18 @@ $ set DEBUG=webserver:*,express* && npm start
 ```
 Open ```https://localhost:3000```.
 
+
+### Screenshots.
+
+![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/dialog.JPG)
+
 ![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/Full-Version.JPG)
+
+![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/loading.JPG)
+
+![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/secure_ssl.JPG)
+
+![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/data_entry.JPG)
 
 ![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/Updated.JPG)
 
