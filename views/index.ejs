@@ -19,7 +19,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <!-- Material Design for Bootstrap CSS-->
-    <!-- Material Design for Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
@@ -30,9 +29,6 @@
     <!-- Material Design for Bootstrap fonts and icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
-    <!--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">-->
-    <!--<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.3.1/css/mdb.min.css">-->
-    <link rel="stylesheet" type="text/css" href="https://github.com/bassjobsen/typeahead.js-bootstrap4-css/blob/master/typeaheadjs.css">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
@@ -42,22 +38,14 @@
 .typeahead {
     z-index: 10;
 }
+
 /*If using icon span before input, like <i class="fa fa-asterisk prefix"></i>*/
 span.twitter-typeahead {
     width: calc(100%);
     margin-left: 0rem;
 }
 /* Aspect of the dropdown of results*/
-.typeahead.dropdown-menu,
-span.twitter-typeahead .tt-menu {
-    min-width: 100%;
-  background: white;
-    /*as large as input*/
-    border: none;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-    border-radius: 0;
-    font-size: 1.2rem;
-}
+
 /*Aspect of results, done*/
 span.twitter-typeahead .tt-suggestion {
     color: #4285F4;
@@ -66,16 +54,62 @@ span.twitter-typeahead .tt-suggestion {
     text-transform: capitalize;
     font-weight: 400;
 }
-#text_editor {
-    position: relative;
-    width: 1810px;
-    height: 150px;
-}
-/* Start by setting display:none to make this hidden.
-   Then we position it in relation to the viewport window
-   with position:fixed. Width, height, top and left speak
-   speak for themselves. Background we set to 80% white with
-   our animation centered, and no-repeating */
+
+.dropdown-menu, span.twitter-typeahead .tt-menu {
+  min-width: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 1rem;
+  color: #8c8c8c;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: none;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
+  border-radius:  0.35rem; }
+
+span.twitter-typeahead .tt-suggestion {
+  display: block;
+  width: 100%;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.5;
+  color: #00cc66;
+  text-align: inherit;
+  white-space: nowrap;
+  background: none;
+  border: none; }
+span.twitter-typeahead .tt-suggestion:focus, .dropdown-item:hover, span.twitter-typeahead .tt-suggestion:hover {
+    color: #00cc66;
+    text-decoration: none;
+    background-color: #f5f5f5; }
+span.twitter-typeahead .active.tt-suggestion, span.twitter-typeahead .tt-suggestion.tt-cursor, span.twitter-typeahead .active.tt-suggestion:focus, span.twitter-typeahead .tt-suggestion.tt-cursor:focus, span.twitter-typeahead .active.tt-suggestion:hover, span.twitter-typeahead .tt-suggestion.tt-cursor:hover {
+    color: #00cc66;
+    text-decoration: none;
+    background-color: #0275d8;
+    outline: 0; }
+span.twitter-typeahead .disabled.tt-suggestion, span.twitter-typeahead .disabled.tt-suggestion:focus, span.twitter-typeahead .disabled.tt-suggestion:hover {
+    color: #00cc66; }
+span.twitter-typeahead .disabled.tt-suggestion:focus, span.twitter-typeahead .disabled.tt-suggestion:hover {
+    text-decoration: none;
+    cursor: not-allowed;
+    background-color: transparent;
+    background-image: none;
+    filter: "progid:DXImageTransform.Microsoft.gradient(enabled = false)"; }
+span.twitter-typeahead {
+  width: 100%; }
+  .input-group span.twitter-typeahead {
+    display: block !important; }
+    .input-group span.twitter-typeahead .tt-menu {
+      top: 2.375rem !important; }
 .fmodal {
     display:    none;
     position:   fixed;
@@ -101,6 +135,17 @@ body.loading {
 body.loading .modal {
     display: block;
 }
+
+.SuggestEngine {
+  margin: 0 20px 5px 20px;
+  padding: 10px 0;
+}
+
+#text_editor {
+    position: relative;
+    width: 1810px;
+    height: 150px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -111,22 +156,24 @@ $('.typeahead').on('focus', function() {
         $(this).parent().siblings().removeClass('active');
     }
 });
-var states = ['127.0.0.1', '192.168.0.0', '127.0.0.2', 'localhost', 'root', 'rootdb', 'employee_info', 'sumit', 'server_db', 'select', 'from', 'as', 'where', 'exists', 'except'];
-var states = new Bloodhound({
+var suggestions = ['127.0.0.1', '192.168.0.0', '127.0.0.2', 'localhost', 'root', 'rootdb', 'employee_info', 'sumit', 'server_db', '192.168.0.1', 'mysql', 'MySQL'];
+var suggestions = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.whitespace,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    // `states` is an array of state names defined in "The Basics"
-    local: states
+    local: suggestions
 });
 $('.typeahead').typeahead({
     highlight: true,
     hint: true,
     minLength: 1
 }, {
-    name: 'states',
-    source: states,
-    limit: 10
-});
+    name: 'suggestions',
+    source: suggestions,
+    limit: 6,
+    templates: {
+      header: '<h6 class="SuggestEngine"> Trie Suggests : </h6>'
+    }
+  });
 });
   function DataLoad(){
     $body = $("body");
