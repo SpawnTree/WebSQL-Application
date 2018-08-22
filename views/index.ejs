@@ -18,13 +18,58 @@
     <!-- Material Design for Bootstrap fonts and icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- Material Design for Bootstrap CSS-->
     <!-- Material Design for Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
     <script src="https://localhost:3000/ace-builds-master/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <!--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.3.1/css/mdb.min.css">-->
+    <link rel="stylesheet" type="text/css" href="https://github.com/bassjobsen/typeahead.js-bootstrap4-css/blob/master/typeaheadjs.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
 <style>
+/***
+  TYPEAHEAD for MDB
+  by djibe
+***/
+.typeahead {
+    z-index: 10;
+}
+/*If using icon span before input, like <i class="fa fa-asterisk prefix"></i>*/
+span.twitter-typeahead {
+    width: calc(100%);
+    margin-left: 0rem;
+}
+/* Aspect of the dropdown of results*/
+.typeahead.dropdown-menu,
+span.twitter-typeahead .tt-menu {
+    min-width: 100%;
+  background: white;
+    /*as large as input*/
+    border: none;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
+    border-radius: 0;
+    font-size: 1.2rem;
+}
+/*Aspect of results, done*/
+span.twitter-typeahead .tt-suggestion {
+    color: #4285F4;
+    cursor: pointer;
+    padding: 1rem;
+    text-transform: capitalize;
+    font-weight: 400;
+}
 #text_editor {
     position: relative;
     width: 1810px;
@@ -62,6 +107,31 @@ body.loading .modal {
 }
 </style>
 <script type="text/javascript">
+$(document).ready(function(){
+$('.typeahead').on('focus', function() {
+    $(this).parent().siblings().addClass('active');
+}).on('blur', function() {
+    if (!$(this).val()) {
+        $(this).parent().siblings().removeClass('active');
+    }
+});
+var states = ['127.0.0.1', '192.168.0.0', '127.0.0.2', 'localhost', 'root', 'rootdb', 'employee_info', 'sumit', 'server_db', 'select', 'from', 'as', 'where', 'exists', 'except'];
+var states = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.whitespace,
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    // `states` is an array of state names defined in "The Basics"
+    local: states
+});
+$('.typeahead').typeahead({
+    highlight: true,
+    hint: true,
+    minLength: 1
+}, {
+    name: 'states',
+    source: states,
+    limit: 10
+});
+});
   function DataLoad(){
     $body = $("body");
     if(window.XMLHttpRequest){ 
@@ -88,16 +158,16 @@ body.loading .modal {
   }
   $("button").click(function( event ) {
       event.preventDefault();
-      DataLoad();
   });
+  function myfunc(event) {
+    var x = event.which || event.keyCode;
+      if(x == 13) {
+        DataLoad();
+    }
+  }
 </script>
 </head>
   <body>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
     <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
     <div>
     	<h4>
@@ -110,28 +180,28 @@ body.loading .modal {
         <div class="form-row">
       <div class="form-group col-md-3">
         <label for="Host_Name" class="bmd-label-floating bmd-label-warning">Host Name</label>
-        <input type="text" class="form-control" name="Host_Name">
+        <div><input type="text" class="form-control typeahead" name="Host_Name"></div>
         <span class="bmd-help">Enter Host Name URL</span>
       </div>
       <div class="form-group col-md-3">
         <label for="User_Name" class="bmd-label-floating">User Name</label>
-        <input type="text" class="form-control" name="User_Name">
+        <div><input type="text" class="form-control typeahead" name="User_Name"></div>
         <span class="bmd-help">Enter User Name.</span>
       </div>
   		<div class="form-group col-md-3">
     		<label for="Database_Name" class="bmd-label-floating">Database Name</label>
-    		<input type="text" class="form-control" name="Database_Name">
+    		<div><input type="text" class="form-control typeahead" name="Database_Name"></div>
     		<span class="bmd-help">Database to connect.</span>
   		</div>
   		<div class="form-group col-md-3">
     		<label for="User_Password" class="bmd-label-floating">Password</label>
-    		<input type="password" class="form-control" name="User_Password">
+    		<div><input type="password" class="form-control typeahead" name="User_Password"></div>
     		<span class="bmd-help">Valid connection password</span>
   		</div>
     </div>
     <div class="form-group">
         <label for="Query_name" class="bmd-label-floating">Enter Valid SQL Query in the box.</label>
-        <input type="hidden" name="Query_name" style="display: none;"><div id="text_editor"></div>
+        <div><input type="hidden" name="Query_name" id="Query_name" style="display: none;"></div><div id="text_editor" onkeydown="myfunc(event)"></div>
   <script type="text/javascript">
     var editor = ace.edit("text_editor");
     editor.setTheme("ace/theme/textmate");
@@ -183,6 +253,7 @@ body.loading .modal {
 </div>
 <h4><code class="text-success">Tables Populated : </code></h4>
 <div id="request"></div>
+<div id="type"></div>
 <% for (var item in data) { %>
 <div class="table-responsive">
 <table class="table">
