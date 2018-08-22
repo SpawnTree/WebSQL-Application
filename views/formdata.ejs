@@ -111,7 +111,7 @@ $('.typeahead').on('focus', function() {
         $(this).parent().siblings().removeClass('active');
     }
 });
-var states = ['Brother', 'brother', 'mother', 'sister', 'father', 'spouse', 'Father', 'Sunny', 'Jessica', '16x Ampitheatre Road', 'Sunny Seasons Apartment', 'Kolkata', 'Karnataka', 'Jessore Road, Hyderabad', 'Sen', 'Wojksi', 'Pelman', 'Strauss', 'Ruby', 'Anand', 'Sharmesh', 'Shuvradeep', '784512596', '895415235', '965411523', '996521457','458566521','845233652', '695411253', '552148756', '663254125', '448596321', '996523221', '863214596', '236522145', '332541269', '152245963', '263255147'];
+var states = ['Brother', 'brother', 'mother', 'sister', 'father', 'spouse', 'Father', 'Sunny', 'Jessica', '16x Ampitheatre Road', 'Sunny Seasons Apartment', 'Kolkata', 'Karnataka', 'Jessore Road, Hyderabad', 'Sen', 'Wojksi', 'Pelman', 'Strauss', 'Ruby', 'Anand', 'Sharmesh', 'Shuvradeep', '784512596', '895415235', '965411523', '996521457','458566521','845233652', '695411253', '552148756', '663254125', '448596321', '996523221', '863214596', '236522145', '332541269', '152245963', '263255147', '5600000',  '13560000', '36000', '9655000', '6320040'];
 var states = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.whitespace,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -201,7 +201,7 @@ $('.typeahead').typeahead({
     </div>
     <div class="form-group col-md-4">
         <label for="SSN" class="bmd-label-floating">Employee Salary</label>
-        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="Emp_Salary">
+        <div><input type="text" class="form-control typeahead" aria-label="Amount (to the nearest dollar)" name="Emp_Salary"></div>
       </div>
       <div class="form-group col-md-4">
         <label for="Bdate" class="bmd-label-floating"></label>
