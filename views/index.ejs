@@ -177,6 +177,10 @@ function delayload() {
   setTimeout(DataLoad, timeDelay);
   $body.addClass("loading"); 
 }
+function delayanimate() {
+  $body = $("body");
+  $body.addClass("loading"); 
+}
   function DataLoad(){
     $body = $("body");
     if(window.XMLHttpRequest){ 
@@ -207,9 +211,9 @@ function delayload() {
   });
   function myfunc(event) {
     var x = event.which || event.keyCode;
-      if(x == 13) {
+      /* if(x == 186) {
         DataLoad();
-    }
+    }*/
   }
 </script>
 </head>
@@ -270,7 +274,7 @@ function delayload() {
       </span>
 	</form>
   <button type="submit" class="btn btn-primary btn-raised btn-success btn-lg" onclick="delayload()" >Submit Data</button>
-<a href="https://localhost:3000/formdata"><div class="btn btn-primary btn-raised btn-info btn-lg">Populate Data </div></a><hr>
+<a href="https://localhost:3000/formdata"><div class="btn btn-primary btn-raised btn-info btn-lg" onclick="delayanimate()">Populate Data</div></a><hr>
 <!-- Modal -->
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
