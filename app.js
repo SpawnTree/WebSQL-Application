@@ -159,7 +159,7 @@ app.post('/', upload.array(), function (req, res, next) {
       res.locals.data = result;
       res.locals.success = " Query Executed Sucessfully.";
       console.log("Cached to local redis instance.")
-      client.setex(sql, 7200, result);
+      client.setex(sql, 5000, JSON.stringify(result));
       // res.send(JSON.stringify(req.body, null, 2));
       // res.send(JSON.stringify(result));
       res.render('response');
