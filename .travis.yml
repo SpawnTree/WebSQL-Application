@@ -13,8 +13,7 @@ env:
 before_script:
   - sh -e /etc/init.d/xvfb start
 install:
-  - npm update
-  - npm install
-  - npm install nsp --global
+  - sudo npm update
+  - sudo npm install
 script:
-  - set DEBUG=webserver:*,express* && npm start 
+  - sudo set DEBUG=webserver:*,express* && npm start 
