@@ -6,7 +6,7 @@ node_js:
 os:
   - linux
 install:
-  - sudo npm update
-  - sudo npm install
+  - npm update
+  - npm install
 script:
-  - sudo set DEBUG=webserver:*,express* && npm start 
+  - set DEBUG=webserver:*,express* && npm start 
