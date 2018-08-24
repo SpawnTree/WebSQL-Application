@@ -9,4 +9,4 @@ install:
   - npm update
   - npm install
 script:
-  - set DEBUG=webserver:*,express* && npm start 
+  - set DEBUG=webserver:*,express* && npm run start 

@@ -16,8 +16,8 @@ var fs = require('fs');
 var qs = require('querystring');
 var multer  = require('multer');
 var upload = multer();
-const responseTime = require('response-time')
-const redis = require('redis');
+const responseTime = require('response-time');
+// const redis = require('redis');
 
 // Encrypt cookies while setting. Decrypt cookies while using.
 const Cryptr = require('cryptr');
@@ -44,12 +44,12 @@ app.use(function (req, res, next) {
     next();
 });
 
-const client = redis.createClient();
+// const client = redis.createClient();
 
 // Print redis errors to the console
-client.on('error', (err) => {
-  console.log("Error " + err);
-});
+// client.on('error', (err) => {
+  // console.log("Error " + err);
+// });
 
 // use response-time as a middleware
 app.use(responseTime());
@@ -159,7 +159,7 @@ app.post('/', upload.array(), function (req, res, next) {
       res.locals.data = result;
       res.locals.success = " Query Executed Sucessfully.";
       console.log("Cached to local redis instance.")
-      client.setex(sql, 5000, JSON.stringify(result));
+      // client.setex(sql, 5000, JSON.stringify(result));
       // res.send(JSON.stringify(req.body, null, 2));
       // res.send(JSON.stringify(result));
       res.render('response');
