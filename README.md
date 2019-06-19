@@ -25,19 +25,3 @@ MySQL Windows
 
 To use Redis, REDIS
 [Redis Install](https://redis.io/download)
-
-### Screenshots.
-
-![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/Sample/dialog.JPG)
-
-![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/Sample/Full-Version.JPG)
-
-![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/Sample/loading.JPG)
-
-![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/Sample/secure_ssl.JPG)
-
-![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/Sample/data_entry.JPG)
-
-![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/Sample/Updated.JPG)
-
-![alt-tag](https://raw.githubusercontent.com/SpawnTree/IPFS-SQL-Fork/master/Sample/result.JPG)
